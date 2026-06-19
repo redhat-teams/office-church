@@ -7,18 +7,25 @@ pip install -r requirements.txt
 python manage.py collectstatic --no-input
 
 # --- Correction temporaire de l'historique des migrations ---
-# État mixte détecté : la table users_user n'existe pas encore, mais
-# les autres apps (contenttypes, admin, ...) sont déjà migrées avec un
-# schéma à jour. On vide l'historique, on migre "users" pour de vrai
-# (crée réellement sa table), puis on fake tout le reste qui existe déjà.
+# Etat mixte : la table users_user n'existe pas, le reste (contenttypes,
+# admin, ...) existe déjà avec un schéma à jour. On fake tout d'abord
+# (pour que les dépendances soient satisfaites dans l'historique), puis
+# on retire uniquement l'entrée fake de "users" et on la migre pour de
+# vrai : ses dépendances étant déjà marquées appliquées, seul users sera
+# réellement créé.
 # À retirer une fois le déploiement réussi.
 python manage.py shell -c "
 from django.db import connection
 with connection.cursor() as c:
     c.execute('DELETE FROM django_migrations')
 "
-python manage.py migrate users
 python manage.py migrate --fake
+python manage.py shell -c "
+from django.db import connection
+with connection.cursor() as c:
+    c.execute(\"DELETE FROM django_migrations WHERE app='users'\")
+"
+python manage.py migrate users
 # --------------------------------------------------------------
 
 python manage.py migrate
