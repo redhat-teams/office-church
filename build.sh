@@ -7,17 +7,17 @@ pip install -r requirements.txt
 python manage.py collectstatic --no-input
 
 # --- Correction temporaire de l'historique des migrations ---
-# Le schéma réel de la base est déjà à jour (toutes les apps), mais
-# django_migrations est corrompu/désynchronisé pour plusieurs apps
-# (admin, users, contenttypes...). On vide tout l'historique puis on
-# le reconstruit en --fake : Django marque toutes les migrations comme
-# appliquées sans toucher au schéma existant.
+# État mixte détecté : la table users_user n'existe pas encore, mais
+# les autres apps (contenttypes, admin, ...) sont déjà migrées avec un
+# schéma à jour. On vide l'historique, on migre "users" pour de vrai
+# (crée réellement sa table), puis on fake tout le reste qui existe déjà.
 # À retirer une fois le déploiement réussi.
 python manage.py shell -c "
 from django.db import connection
 with connection.cursor() as c:
     c.execute('DELETE FROM django_migrations')
 "
+python manage.py migrate users
 python manage.py migrate --fake
 # --------------------------------------------------------------
 
