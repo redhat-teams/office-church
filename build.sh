@@ -7,16 +7,15 @@ pip install -r requirements.txt
 python manage.py collectstatic --no-input
 
 # --- Correction temporaire de l'historique des migrations ---
-# Supprime toutes les entrées admin/users de django_migrations pour
-# repartir sur un historique cohérent, puis les réapplique dans l'ordre.
+# La base est en réalité vide : l'historique django_migrations était
+# corrompu sans que les tables existent vraiment. On nettoie tout
+# l'historique et on laisse Django recréer les tables normalement.
 # À retirer une fois le déploiement réussi.
 python manage.py shell -c "
 from django.db import connection
 with connection.cursor() as c:
-    c.execute(\"DELETE FROM django_migrations WHERE app IN ('admin', 'users')\")
+    c.execute('DELETE FROM django_migrations')
 "
-python manage.py migrate users --fake || true
-python manage.py migrate admin --fake || true
 # --------------------------------------------------------------
 
 python manage.py migrate
