@@ -24,7 +24,7 @@ from django.db import connection
 with connection.cursor() as c:
     c.execute(\"DELETE FROM django_migrations WHERE app IN ('users', 'admin')\")
 "
-python manage.py migrate users
+python manage.py migrate users --fake-initial
 python manage.py migrate admin --fake
 # --------------------------------------------------------------
 
