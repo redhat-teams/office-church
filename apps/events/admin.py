@@ -1,2 +1,8 @@
 from django.contrib import admin
-# TODO: register models
+from .models import Event
+
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    list_display  = ["title", "date", "category", "location"]
+    list_filter   = ["category"]
+    search_fields = ["title"]

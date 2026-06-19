@@ -1,6 +1,6 @@
 from django.urls import path
-from . import views
+from .views import ChurchSettingsView
 
 urlpatterns = [
-    path("health/", views.health),
+    path("", ChurchSettingsView.as_view()),
 ]

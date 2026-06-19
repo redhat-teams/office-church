@@ -1,2 +1,7 @@
 from rest_framework import serializers
-# TODO: add serializers
+from .models import CCMContent
+
+class CCMContentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model  = CCMContent
+        fields = "__all__"

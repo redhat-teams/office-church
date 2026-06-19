@@ -1,5 +1,7 @@
 from .base import *
 import os
+from dotenv import load_dotenv
+load_dotenv(BASE_DIR / ".env")
 
 DEBUG = False
 SECRET_KEY = os.environ["SECRET_KEY"]
@@ -11,16 +13,13 @@ CORS_ALLOW_CREDENTIALS = True
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("DB_NAME", "church"),
-        "USER": os.environ.get("DB_USER", "postgres"),
+        "NAME":     os.environ.get("DB_NAME", "church"),
+        "USER":     os.environ.get("DB_USER", "postgres"),
         "PASSWORD": os.environ.get("DB_PASSWORD", ""),
-        "HOST": os.environ.get("DB_HOST", "db"),
-        "PORT": os.environ.get("DB_PORT", "5432"),
+        "HOST":     os.environ.get("DB_HOST", "db"),
+        "PORT":     os.environ.get("DB_PORT", "5432"),
     }
 }
 
-# Whitenoise pour les fichiers statiques
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
-STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"

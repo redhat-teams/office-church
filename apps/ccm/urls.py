@@ -1,6 +1,7 @@
 from django.urls import path
-from . import views
+from .views import CCMListCreateView, CCMDetailView
 
 urlpatterns = [
-    path("health/", views.health),
+    path("",          CCMListCreateView.as_view()),
+    path("<int:pk>/", CCMDetailView.as_view()),
 ]

@@ -1,9 +1,27 @@
+from rest_framework import generics, filters
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 
 from .models import PrayerRequest
 from .serializers import PrayerRequestSerializer
+from apps.users.permissions import IsAdminOrStaff
+
+
+class PrayerRequestListView(generics.ListAPIView):
+    """Liste des demandes de prière — réservé au staff/admin."""
+    queryset = PrayerRequest.objects.all().order_by("-created_at")
+    serializer_class = PrayerRequestSerializer
+    permission_classes = [IsAdminOrStaff]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["prenom", "nom", "tel", "ville"]
+
+
+class PrayerRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """Détail / mise à jour du statut / suppression — réservé au staff/admin."""
+    queryset = PrayerRequest.objects.all()
+    serializer_class = PrayerRequestSerializer
+    permission_classes = [IsAdminOrStaff]
 
 
 class PrayerRequestCreateView(APIView):

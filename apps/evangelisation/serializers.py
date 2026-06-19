@@ -1,2 +1,7 @@
 from rest_framework import serializers
-# TODO: add serializers
+from .models import EvangelisationRegistration
+
+class EvangelisationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model  = EvangelisationRegistration
+        fields = "__all__"

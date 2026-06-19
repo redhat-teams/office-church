@@ -1,2 +1,6 @@
 from django.contrib import admin
-# TODO: register models
+from .models import Ministry
+
+@admin.register(Ministry)
+class MinistryAdmin(admin.ModelAdmin):
+    list_display = ["name", "leader", "order", "is_active"]

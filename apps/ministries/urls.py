@@ -1,6 +1,7 @@
 from django.urls import path
-from . import views
+from .views import MinistryListCreateView, MinistryDetailView
 
 urlpatterns = [
-    path("health/", views.health),
+    path("",          MinistryListCreateView.as_view()),
+    path("<int:pk>/", MinistryDetailView.as_view()),
 ]

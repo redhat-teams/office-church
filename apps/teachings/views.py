@@ -1,6 +1,21 @@
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+from rest_framework import generics, filters
+from rest_framework.permissions import AllowAny
+from .models import Teaching
+from .serializers import TeachingSerializer
+from apps.users.permissions import IsAdminOrStaff
 
-@api_view(["GET"])
-def health(request):
-    return Response({"status": "ok"})
+class TeachingListCreateView(generics.ListCreateAPIView):
+    queryset         = Teaching.objects.all()
+    serializer_class = TeachingSerializer
+    filter_backends  = [filters.SearchFilter]
+    search_fields    = ["title", "speaker", "description", "category"]
+
+    def get_permissions(self):
+        if self.request.method == "POST":
+            return [IsAdminOrStaff()]
+        return [AllowAny()]
+
+class TeachingDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset           = Teaching.objects.all()
+    serializer_class   = TeachingSerializer
+    permission_classes = [IsAdminOrStaff]

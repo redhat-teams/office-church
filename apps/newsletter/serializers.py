@@ -1,2 +1,7 @@
 from rest_framework import serializers
-# TODO: add serializers
+from .models import NewsletterSubscriber
+
+class NewsletterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model  = NewsletterSubscriber
+        fields = ["id", "email", "created_at"]
