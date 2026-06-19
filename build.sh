@@ -13,19 +13,19 @@ python manage.py collectstatic --no-input
 # dépend de users) pour les réappliquer dans le bon ordre : users en
 # réel (crée la table), admin en fake juste après (sa table existe déjà).
 # À retirer une fois le déploiement réussi.
-# python manage.py shell -c "
-# from django.db import connection
-# with connection.cursor() as c:
-#     c.execute('DELETE FROM django_migrations')
-# "
-# python manage.py migrate --fake
-# python manage.py shell -c "
-# from django.db import connection
-# with connection.cursor() as c:
-#     c.execute(\"DELETE FROM django_migrations WHERE app IN ('users', 'admin')\")
-# "
-# python manage.py migrate users
-# python manage.py migrate admin --fake
+python manage.py shell -c "
+from django.db import connection
+with connection.cursor() as c:
+    c.execute('DELETE FROM django_migrations')
+"
+python manage.py migrate --fake
+python manage.py shell -c "
+from django.db import connection
+with connection.cursor() as c:
+    c.execute(\"DELETE FROM django_migrations WHERE app IN ('users', 'admin')\")
+"
+python manage.py migrate users
+python manage.py migrate admin --fake
 # --------------------------------------------------------------
 
 python manage.py migrate
