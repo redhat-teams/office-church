@@ -7,14 +7,16 @@ pip install -r requirements.txt
 python manage.py collectstatic --no-input
 
 # --- Correction temporaire de l'historique des migrations ---
-# Corrige l'erreur InconsistentMigrationHistory : admin.0001_initial
-# appliquée avant users.0001_initial. À retirer une fois le déploiement réussi.
+# Supprime toutes les entrées admin/users de django_migrations pour
+# repartir sur un historique cohérent, puis les réapplique dans l'ordre.
+# À retirer une fois le déploiement réussi.
 python manage.py shell -c "
 from django.db import connection
 with connection.cursor() as c:
-    c.execute(\"DELETE FROM django_migrations WHERE app='admin' AND name='0001_initial'\")
+    c.execute(\"DELETE FROM django_migrations WHERE app IN ('admin', 'users')\")
 "
-python manage.py migrate users 0001_initial --fake || true
+python manage.py migrate users --fake || true
+python manage.py migrate admin --fake || true
 # --------------------------------------------------------------
 
 python manage.py migrate
