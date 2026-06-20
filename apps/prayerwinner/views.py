@@ -9,12 +9,21 @@ from apps.users.permissions import IsAdminOrStaff
 
 
 class PrayerRequestListView(generics.ListAPIView):
-    """Liste des demandes de prière — réservé au staff/admin."""
+    """Liste des demandes de prière — réservé au staff/admin.
+    Supporte le filtrage par statut via ?status=pending|approved|rejected
+    """
     queryset = PrayerRequest.objects.all().order_by("-created_at")
     serializer_class = PrayerRequestSerializer
     permission_classes = [IsAdminOrStaff]
     filter_backends = [filters.SearchFilter]
     search_fields = ["prenom", "nom", "tel", "ville"]
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        status_param = self.request.query_params.get("status")
+        if status_param:
+            qs = qs.filter(status=status_param)
+        return qs
 
 
 class PrayerRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
