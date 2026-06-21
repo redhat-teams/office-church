@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "apps.contacts",
     "apps.settings_app",
     "apps.cinepay",
+    "apps.testimonials",
 ]
 
 MIDDLEWARE = [

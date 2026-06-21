@@ -12,6 +12,17 @@ class ChurchSettings(models.Model):
     instagram   = models.URLField(blank=True)
     whatsapp    = models.CharField(max_length=30, blank=True)
     logo        = models.ImageField(upload_to="settings/", null=True, blank=True)
+
+    # ── Événement majeur (section countdown affichée sur l'accueil) ──────────
+    major_event_enabled     = models.BooleanField(default=True)
+    major_event_badge       = models.CharField(max_length=100, blank=True, default="Évènement Majeur - Église")
+    major_event_title       = models.CharField(max_length=255, blank=True, default="Conférence Internationale du Réveil 2026")
+    major_event_description = models.TextField(blank=True, default="Rejoignez-nous pour un moment exceptionnel de réveil spirituel, de prière, d'adoration et d'enseignement.")
+    major_event_date        = models.DateTimeField(null=True, blank=True)
+    major_event_location    = models.CharField(max_length=255, blank=True, default="Salle de conférence de l'église")
+    major_event_cta_label   = models.CharField(max_length=100, blank=True, default="Rejoindre maintenant")
+    major_event_cta_link    = models.CharField(max_length=255, blank=True, default="/contact")
+
     updated_at  = models.DateTimeField(auto_now=True)
 
     class Meta:

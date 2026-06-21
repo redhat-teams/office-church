@@ -18,4 +18,5 @@ urlpatterns = [
     path("api/contacts/",      include("apps.contacts.urls")),
     path("api/settings/",      include("apps.settings_app.urls")),
     path("api/cinepay/",       include("apps.cinepay.urls")),
+    path("api/testimonials/",  include("apps.testimonials.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
